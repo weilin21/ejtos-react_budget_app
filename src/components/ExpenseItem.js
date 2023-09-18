@@ -1,14 +1,30 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { TiDelete } from "react-icons/ti";
+import {
+  AiFillPlusCircle,
+  AiFillMinusCircle,
+  AiFillCloseCircle,
+} from "react-icons/ai";
 
 const ExpenseItem = (props) => {
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, currency } = useContext(AppContext);
 
   const handleDeleteExpense = () => {
     dispatch({
       type: "DELETE_EXPENSE",
       payload: props.id,
+    });
+  };
+
+  const reduceAllocation = (name) => {
+    const expense = {
+      name: name,
+      cost: 10,
+    };
+
+    dispatch({
+      type: "RED_EXPENSE",
+      payload: expense,
     });
   };
 
@@ -27,12 +43,28 @@ const ExpenseItem = (props) => {
   return (
     <tr>
       <td>{props.name}</td>
-      <td>£{props.cost}</td>
       <td>
-        <button onClick={(event) => increaseAllocation(props.name)}>+</button>
+        {currency} {props.cost}
       </td>
       <td>
-        <TiDelete size="1.5em" onClick={handleDeleteExpense}></TiDelete>
+        <AiFillPlusCircle
+          size="1.5em"
+          onClick={(event) => increaseAllocation(props.name)}
+          style={{ color: "green" }}
+        ></AiFillPlusCircle>
+      </td>
+      <td>
+        <AiFillMinusCircle
+          size="1.5em"
+          onClick={(event) => reduceAllocation(props.name)}
+          style={{ color: "red" }}
+        ></AiFillMinusCircle>
+      </td>
+      <td>
+        <AiFillCloseCircle
+          size="1.5em"
+          onClick={handleDeleteExpense}
+        ></AiFillCloseCircle>
       </td>
     </tr>
   );
